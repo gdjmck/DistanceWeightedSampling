@@ -170,7 +170,7 @@ train_dataset = datasets.ImageFolder(
     traindir,
     transforms.Compose([
         #transforms.RandomResizedCrop(224),
-        transforms.Resize((228,)),
+        transforms.Resize((228)),
         transforms.RandomCrop((224, 224)),
         transforms.RandomHorizontalFlip(),
         transforms.ToTensor(),
