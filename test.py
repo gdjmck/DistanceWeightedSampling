@@ -30,7 +30,7 @@ if __name__ == '__main__':
     print('reference images:', ref)
     vis = visdom.Visdom()
     for f in ref:
-        vis.image(np.transpose(cv2.imread(f)[..., ::-1], (2, 0, 1)), win=f, opt=dict(title='REF_%s'%f.rsplit('/')[-1]))    
+        vis.image(np.transpose(cv2.imread(f)[..., ::-1], (2, 0, 1)), win=f, opts=dict(title='REF_%s'%f.rsplit('/')[-1]))    
 
     with torch.no_grad():
         rec = {f.rsplit('/')[-1]: {'top_8': [], 'query': model(transform(Image.open(f).convert('RGB')).unsqueeze(0).cuda(None, non_blocking=True), False).cpu().numpy()} for f in ref}
