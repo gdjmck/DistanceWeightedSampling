@@ -60,8 +60,11 @@ class MarginNet(nn.Module):
         x = self.base_net(x)
         x = self.dense(x)
         embedding = self.normalize(x)
-        sampled = self.sampled(embedding)
-        return sampled if sampling else embedding
+        if not sampling:
+            return embedding
+        else:
+            sampled = self.sampled(embedding)
+            return sampled
 
 
 class MarginLoss(nn.Module):
