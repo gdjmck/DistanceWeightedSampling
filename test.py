@@ -51,6 +51,6 @@ if __name__ == '__main__':
                             break
                     if update:
                         # update top 8 in visdom
-                        imgs = np.concatenate([np.transpose(cv2.resize(cv2.imread(os.path.join(args.img_folder_test, d['fn'])), (250, 250))[..., ::-1], (2, 0, 1))[np.newaxis] for d in top_4[j]['top_8']])
+                        imgs = np.concatenate([np.transpose(cv2.resize(cv2.imread(os.path.join(args.img_folder_test, d['fn'])), (250, 250))[..., ::-1], (2, 0, 1))[np.newaxis] for d in rec[key]['top_8']])
                         vis.images(imgs, win=j, nrow=2, opts=dict(title='IMG_%s'%key))
                         print('Updated %s'%key)
