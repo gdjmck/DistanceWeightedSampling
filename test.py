@@ -33,12 +33,12 @@ if __name__ == '__main__':
         vis.image(np.transpose(cv2.imread(f)[..., ::-1], (2, 0, 1)), win=f)    
 
     with torch.no_grad():
-        rec = {f.rsplit('/')[-1]: {'top_8': [], 'query': model(transform(Image.open(f).convert('RGB')).unsqueeze(0).cuda(None, non_blocking=True), False).detach().numpy()} for f in ref}
+        rec = {f.rsplit('/')[-1]: {'top_8': [], 'query': model(transform(Image.open(f).convert('RGB')).unsqueeze(0).cuda(None, non_blocking=True), False).cpu().numpy()} for f in ref}
 
         for f in data[5:]:
             img = Image.open(f).convert('RGB')
             inp = transform(img).unsqueeze(0).cuda(None, non_blocking=True)
-            embedding = model(inp, False).detach().numpy()
+            embedding = model(inp, False).cpu().numpy()
             for key in rec.keys():
                 rec[key]['top_8'].append({'fn': f, 'dist': np.fabs(embedding - rec[key]['query']).sum()})
                 if len(rec[key]['top_8']) > 8:
