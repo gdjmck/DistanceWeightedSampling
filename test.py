@@ -23,6 +23,7 @@ if __name__ == '__main__':
     model.eval()
     args = train.args
     data = glob.glob(os.path.join(train.traindir, '*.jpg'))
+    print('num of data:', len(data))
     np.random.shuffle(data)
     ref = data[:5]
     vis = visdom.Visdom()
@@ -50,3 +51,4 @@ if __name__ == '__main__':
                         # update top 8 in visdom
                         imgs = np.concatenate([np.transpose(cv2.resize(cv2.imread(os.path.join(args.img_folder_test, d['fn'])), (250, 250))[..., ::-1], (2, 0, 1))[np.newaxis] for d in top_4[j]['top_8']])
                         vis.images(imgs, win=j, nrow=2, opts=dict(title='IMG_%s'%key))
+                        print('Updated %s'%key)
