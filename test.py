@@ -23,7 +23,7 @@ if __name__ == '__main__':
     model.eval()
     args = train.args
     labels = os.listdir(train.traindir)
-    data = [*list(glob.glob(os.path.join(train.traindir, label, '*.jpg'))) for label in labels]
+    data = [fn for fn in glob.glob(os.path.join(train.traindir, label, '*.jpg')) for label in labels]
     print('num of data:', len(data))
     np.random.shuffle(data)
     ref = data[:5]
