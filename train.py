@@ -85,6 +85,7 @@ parser.add_argument('--normalize-weights', action='store_true',
                     help='normalize log weights .')
 parser.add_argument('--print-freq', type=int, default=20,
                     help='number of batches to wait before logging.')
+parser.add_argument('--test', action='store_true', help='switch to test mode.')
 args = parser.parse_args()
 
 logging.info(args)
@@ -169,7 +170,8 @@ train_dataset = datasets.ImageFolder(
     traindir,
     transforms.Compose([
         #transforms.RandomResizedCrop(224),
-        transforms.Resize((224,224)),
+        transforms.Resize((228,)),
+        transforms.RandomCrop((224, 224)),
         transforms.RandomHorizontalFlip(),
         transforms.ToTensor(),
         normalize])
