@@ -11,7 +11,7 @@ import torchvision.transforms as transforms
 model = train.model
 
 transform = transforms.Compose([
-        transforms.Resize((228,)),
+        transforms.Resize((228)),
         transforms.RandomCrop((224, 224)),
         transforms.RandomHorizontalFlip(),
         transforms.ToTensor(),
