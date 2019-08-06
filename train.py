@@ -86,6 +86,7 @@ parser.add_argument('--normalize-weights', action='store_true',
 parser.add_argument('--print-freq', type=int, default=20,
                     help='number of batches to wait before logging.')
 parser.add_argument('--test', action='store_true', help='switch to test mode.')
+parser.add_argument('--eval-path', default='', type=str, help='data path of evaluation set.')
 args = parser.parse_args()
 
 logging.info(args)
