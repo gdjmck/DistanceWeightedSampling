@@ -148,6 +148,7 @@ class   DistanceWeightedSampling(nn.Module):
         n_indices = []
 
         np_weights = weights.cpu().numpy()
+        np_weights = np.nan_to_num(np_weights, 1e-8)
         for i in range(n):
             block_idx = i // k
 
