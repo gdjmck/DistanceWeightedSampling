@@ -56,12 +56,12 @@ class MarginNet(nn.Module):
         self.normalize = l2_norm
         self.sampled = DistanceWeightedSampling(batch_k=batch_k, normalize=normalize)
 
-    def forward(self,x):
+    def forward(self, x, sampling=True):
         x = self.base_net(x)
         x = self.dense(x)
-        x = self.normalize(x)
-        x = self.sampled(x)
-        return x
+        embedding = self.normalize(x)
+        sampled = self.sampled(embedding)
+        return sampled if sampling else embedding
 
 
 class MarginLoss(nn.Module):
