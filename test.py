@@ -23,20 +23,21 @@ if __name__ == '__main__':
     model.eval()
     args = train.args
     labels = os.listdir(train.traindir)
-    data = [fn for fn in glob.glob(os.path.join(train.traindir, label, '*.jpg')) for label in labels]
+    data = [fn for label in labels for fn in glob.glob(os.path.join(train.traindir, label, '*.jpg'))]
     print('num of data:', len(data))
     np.random.shuffle(data)
     ref = data[:5]
+    print('reference images:', ref)
     vis = visdom.Visdom()
     for f in ref:
         vis.image(np.transpose(cv2.imread(f)[..., ::-1], (2, 0, 1)), win=f)    
 
     with torch.no_grad():
-        rec = {f.rsplit('/')[-1]: {'top_8': [], 'query': model(transform(Image.open(f).convert('rgb'))).detach().numpy()} for f in ref}
+        rec = {f.rsplit('/')[-1]: {'top_8': [], 'query': model(transform(Image.open(f).convert('RGB')).unsqueeze(0)).detach().numpy()} for f in ref}
 
         for f in data[5:]:
-            img = Image.open(f).convert('rgb')
-            inp = transform(img)
+            img = Image.open(f).convert('RGB')
+            inp = transform(img).unsqueeze(0)
             embedding = model(inp).detach().numpy()
             for key in rec.keys():
                 rec[key]['top_8'].append({'fn': f, 'dist': np.fabs(embedding - rec[key]['query']).sum()})
