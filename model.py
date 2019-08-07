@@ -12,6 +12,7 @@ def l2_norm(x):
 def get_distance(x):
     _x = x.detach()
     sim = torch.matmul(_x, _x.t())
+    sim = torch.clamp(sim, max=1.0)
     dist = 2 - 2*sim
     dist += torch.eye(dist.shape[0]).to(dist.device)   # maybe dist += torch.eye(dist.shape[0]).to(dist.device)*1e-8
     dist = dist.sqrt()
@@ -126,7 +127,7 @@ class   DistanceWeightedSampling(nn.Module):
         n, d = x.shape
         distance = get_distance(x) # n x n
         try:
-            assert (distance != distance).any() == 0
+            assert (distance != distance).any() == 0 # 因为n x d 跟 d x n算距离时乘出来的结果有负数导致sqrt操作后得到nan
         except AssertionError:
             print('Got an nan', x)
         distance = distance.clamp(min=self.cutoff)
