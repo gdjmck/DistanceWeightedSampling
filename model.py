@@ -124,7 +124,11 @@ class   DistanceWeightedSampling(nn.Module):
     def forward(self, x):
         k = self.batch_k
         n, d = x.shape
-        distance = get_distance(x)
+        distance = get_distance(x) # n x n
+        try:
+            assert (distance != distance).any() == 0
+        except AssertionError:
+            print('Got an nan', x)
         distance = distance.clamp(min=self.cutoff)
         log_weights = ((2.0 - float(d)) * distance.log() - (float(d-3)/2)*torch.log(torch.clamp(1.0 - 0.25*(distance*distance), min=1e-8)))
 
@@ -151,7 +155,7 @@ class   DistanceWeightedSampling(nn.Module):
         n_indices = []
 
         np_weights = weights.cpu().numpy()
-        np_weights = np.nan_to_num(np_weights, 1e-8)
+        # np_weights = np.nan_to_num(np_weights, 1e-8)
         for i in range(n):
             block_idx = i // k
 
