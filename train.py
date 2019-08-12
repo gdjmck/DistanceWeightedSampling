@@ -18,6 +18,7 @@ import torchvision.models as models
 from torch import nn
 from torch.autograd import Variable
 from torch.nn import Parameter
+from PIL import Image
 
 from model import *
 from sampler import BalancedBatchSampler 
@@ -162,6 +163,9 @@ if args.resume:
 
 
 # dataset 
+def loader(fn):
+    return Image.open(fn).convert('RGB')
+
 traindir = os.path.join(args.data_path, 'train')
 valdir = os.path.join(args.data_path, 'val')
 normalize = transforms.Normalize(mean=[0.485, 0.456, 0.406],
@@ -175,7 +179,8 @@ train_dataset = datasets.ImageFolder(
         transforms.RandomCrop((224, 224)),
         transforms.RandomHorizontalFlip(),
         transforms.ToTensor(),
-        normalize])
+        normalize]),
+    loader= loader
     )
 
 batch_sampler = BalancedBatchSampler(train_dataset, args.batch_size, args.batch_k, length=args.batch_num)
