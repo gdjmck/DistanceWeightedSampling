@@ -166,22 +166,23 @@ if args.resume:
 def loader(fn):
     return Image.open(fn).convert('RGB')
 
+def convert_dataset(folder, loader=lambda x: Image.open(x).convert('RGB')):
+    data = torchvision.datasets.ImageFolder(folder, transforms.Compose([
+                                        transforms.Resize(228),
+                                        transforms.RandomCrop((224, 224)),
+                                        transforms.RandomHorizontalFlip(),
+                                        transforms.ToTensor(),
+                                        transforms.Normalize(mean=[0.485, 0.456, 0.406],
+                                        std=[0.229, 0.224, 0.225])]),
+                                        loader=loader)
+    return data
+
 traindir = os.path.join(args.data_path, 'train')
 valdir = os.path.join(args.data_path, 'val')
 normalize = transforms.Normalize(mean=[0.485, 0.456, 0.406],
                                  std=[0.229, 0.224, 0.225])
 
-train_dataset = datasets.ImageFolder(
-    traindir,
-    transforms.Compose([
-        #transforms.RandomResizedCrop(224),
-        transforms.Resize((228)),
-        transforms.RandomCrop((224, 224)),
-        transforms.RandomHorizontalFlip(),
-        transforms.ToTensor(),
-        normalize]),
-    loader= loader
-    )
+train_dataset = convert_dataset(traindir)
 
 batch_sampler = BalancedBatchSampler(train_dataset, args.batch_size, args.batch_k, length=args.batch_num)
 

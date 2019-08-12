@@ -10,12 +10,20 @@ def loader_test(fn):
     label = parts[-2]
     return fn, label, Image.open(fn).convert('RGB')
 
+def dict_reverse(d):
+    d_rev = {}
+    for key in d.keys():
+        d_rev[d[key]] = key
+    return d_rev
+
 if __name__ == '__main__':
+    device = torch.device('cuda')
     args = train.args
     model = train.model
     model.eval()
 
-    data = train.convert_dataset(os.path.join(args.img_folder_test, 'train'))
+    data = train.convert_dataset(args.data_path)
+    fn_dict = dict_reverse(data.class_to_idx)
     # print('class to idx:', data.class_to_idx)
     # print(len(data.targets), data.targets)
 
@@ -23,10 +31,9 @@ if __name__ == '__main__':
     embeddings = {}
     with torch.no_grad():
         for i, (img, label) in enumerate(dataset):
-            label = label.numpy()[0]
+            label = fn_dict[label.numpy()[0]]
             print(label)
-            assert label == data.targets[i]
-            img = img.to(train.device)
+            img = img.to(device)
             embedding = model(img, sampling=False).cpu().numpy()
             if label not in embeddings.keys():
                 embeddings[label] = [embedding]
