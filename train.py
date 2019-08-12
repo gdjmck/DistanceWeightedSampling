@@ -167,7 +167,7 @@ def loader(fn):
     return Image.open(fn).convert('RGB')
 
 def convert_dataset(folder, loader=lambda x: Image.open(x).convert('RGB')):
-    data = torchvision.datasets.ImageFolder(folder, transforms.Compose([
+    data = datasets.ImageFolder(folder, transforms.Compose([
                                         transforms.Resize(228),
                                         transforms.RandomCrop((224, 224)),
                                         transforms.RandomHorizontalFlip(),
