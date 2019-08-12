@@ -22,7 +22,7 @@ if __name__ == '__main__':
     model = train.model
     model.eval()
 
-    data = train.convert_dataset(args.data_path)
+    data = train.convert_dataset(args.eval_path)
     fn_dict = dict_reverse(data.class_to_idx)
     # print('class to idx:', data.class_to_idx)
     # print(len(data.targets), data.targets)
