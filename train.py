@@ -186,7 +186,7 @@ valdir = os.path.join(args.data_path, 'val')
 normalize = transforms.Normalize(mean=[0.485, 0.456, 0.406],
                                  std=[0.229, 0.224, 0.225])
 
-train_dataset = convert_dataset(traindir)
+train_dataset = imagefolder(traindir)
 
 batch_sampler = BalancedBatchSampler(train_dataset, args.batch_size, args.batch_k, length=args.batch_num)
 
