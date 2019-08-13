@@ -170,15 +170,15 @@ def loader(fn):
     return Image.open(fn).convert('RGB')
 
 def imagefolder(folder, loader=lambda x: Image.open(x).convert('RGB'), ret_fn=False):
-    data = ImageFolderWithName(folder, transforms.Compose([
+    data = ImageFolderWithName(return_fn=ret_fn, folder, transforms.Compose([
                                         transforms.Resize(228),
                                         transforms.RandomCrop((224, 224)),
                                         transforms.RandomHorizontalFlip(),
                                         transforms.ToTensor(),
                                         transforms.Normalize(mean=[0.485, 0.456, 0.406],
                                         std=[0.229, 0.224, 0.225])]),
-                                        loader=loader,
-                                        return_fn=ret_fn)
+                                        loader=loader
+                                        )
     return data
 
 traindir = os.path.join(args.data_path, 'train')
