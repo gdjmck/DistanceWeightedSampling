@@ -22,7 +22,7 @@ if __name__ == '__main__':
     model = train.model
     model.eval()
 
-    data = train.convert_dataset(args.eval_path)
+    data = train.imagefolder(args.eval_path, ret_fn=True)
     fn_dict = dict_reverse(data.class_to_idx)
     # print('class to idx:', data.class_to_idx)
     # print(len(data.targets), data.targets)
@@ -30,16 +30,25 @@ if __name__ == '__main__':
     dataset = torch.utils.data.DataLoader(data)
     embeddings = {}
     with torch.no_grad():
-        for i, (img, label) in enumerate(dataset):
+        for i, (img, label, fn) in enumerate(dataset):
             label = fn_dict[label.numpy()[0]]
-            print(label)
+            print(label, fn)
             img = img.to(device)
             embedding = model(img, sampling=False).cpu().numpy()
-            if label not in embeddings.keys():
-                embeddings[label] = [embedding]
+            #if label not in embeddings.keys():
+            embeddings[os.path.join(label, fn[0])] = [embedding]
+            '''
             else:
                 embeddings[label].append(embedding)
-        
-    with open('embeddings.pkl', 'wb') as f:
-        pickle.dump(embeddings, f)
-        print('saved embedding.')        
+            '''
+    
+    embed_file = args.embedding_filename
+    if embed_file != '':
+        if not embed_file.endswith('.pkl'):
+            if '.' in embed_file:
+                embed_file = embed_file.rsplit('.', 1)[0] + '.pkl'
+            else:
+                embed_file = embed_file + '.pkl'
+        with open(embed_file, 'wb') as f:
+            pickle.dump(embeddings, f)
+            print('saved embedding.')        

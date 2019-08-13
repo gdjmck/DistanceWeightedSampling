@@ -22,6 +22,7 @@ from PIL import Image
 
 from model import *
 from sampler import BalancedBatchSampler 
+from dataset import ImageFolderWithName
 
 
 logging.basicConfig(level=logging.INFO)
@@ -88,6 +89,8 @@ parser.add_argument('--print-freq', type=int, default=20,
                     help='number of batches to wait before logging.')
 parser.add_argument('--test', action='store_true', help='switch to test mode.')
 parser.add_argument('--eval-path', default='', type=str, help='data path of evaluation set.')
+parser.add_argument('--embedding-filename', default='', type=str,
+                    help='destination of embedding pickle file')
 args = parser.parse_args()
 
 logging.info(args)
@@ -166,15 +169,16 @@ if args.resume:
 def loader(fn):
     return Image.open(fn).convert('RGB')
 
-def convert_dataset(folder, loader=lambda x: Image.open(x).convert('RGB')):
-    data = datasets.ImageFolder(folder, transforms.Compose([
+def imagefolder(folder, loader=lambda x: Image.open(x).convert('RGB'), ret_fn=False):
+    data = ImageFolderWithName(folder, transforms.Compose([
                                         transforms.Resize(228),
                                         transforms.RandomCrop((224, 224)),
                                         transforms.RandomHorizontalFlip(),
                                         transforms.ToTensor(),
                                         transforms.Normalize(mean=[0.485, 0.456, 0.406],
                                         std=[0.229, 0.224, 0.225])]),
-                                        loader=loader)
+                                        loader=loader,
+                                        return_fn=ret_fn)
     return data
 
 traindir = os.path.join(args.data_path, 'train')
