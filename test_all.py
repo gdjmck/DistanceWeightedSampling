@@ -23,7 +23,7 @@ if __name__ == '__main__':
     model.eval()
 
     data = train.imagefolder(args.eval_path, ret_fn=True)
-    fn_dict = dict_reverse(data.class_to_idx)
+    # fn_dict = dict_reverse(data.class_to_idx)
     # print('class to idx:', data.class_to_idx)
     # print(len(data.targets), data.targets)
 
@@ -31,12 +31,12 @@ if __name__ == '__main__':
     embeddings = {}
     with torch.no_grad():
         for i, (img, label, fn) in enumerate(dataset):
-            label = fn_dict[label.numpy()[0]]
-            print(label, fn)
+            #label = fn_dict[label.numpy()[0]]
+            #print(label, fn)
             img = img.to(device)
             embedding = model(img, sampling=False).cpu().numpy()
             #if label not in embeddings.keys():
-            embeddings[os.path.join(label, fn[0])] = [embedding]
+            embeddings[fn[0][0]] = [embedding]
             '''
             else:
                 embeddings[label].append(embedding)
