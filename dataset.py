@@ -1,7 +1,7 @@
 import torchvision.datasets as datasets
 
 class ImageFolderWithName(datasets.ImageFolder):
-    def __init__(self, *args, **kwargs, return_fn=False):
+    def __init__(self, return_fn=False, *args, **kwargs):
         super(datasets.ImageFolder, self).__init__(*args, **kwargs)
         self.return_fn = return_fn
 
