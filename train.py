@@ -170,7 +170,7 @@ def loader(fn):
     return Image.open(fn).convert('RGB')
 
 def imagefolder(folder, loader=lambda x: Image.open(x).convert('RGB'), ret_fn=False):
-    data = ImageFolderWithName(return_fn=ret_fn, folder, transforms.Compose([
+    data = ImageFolderWithName(return_fn=ret_fn, root=folder, transform=transforms.Compose([
                                         transforms.Resize(228),
                                         transforms.RandomCrop((224, 224)),
                                         transforms.RandomHorizontalFlip(),
