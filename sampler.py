@@ -48,7 +48,7 @@ class BalancedBatchSampler(Sampler):
         dataset_type = type(dataset)
         if dataset_type is torchvision.datasets.MNIST:
             return dataset.train_labels[idx].item()
-        elif dataset_type is torchvision.datasets.ImageFolder:
+        elif isinstance(dataset, torchvision.datasets.ImageFolder):
             return dataset.imgs[idx][1]
         else:
             raise NotImplementedError
