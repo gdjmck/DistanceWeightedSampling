@@ -79,6 +79,8 @@ parser.add_argument('--seed', type=int, default=None,
                     help='random seed to use')
 parser.add_argument('--model', type=str, default='resnet50',choices=model_names,
                     help='type of model to use. see vision_model for options.')
+parser.add_argument('--ckpt', type=str, default='./checkpoints',
+                    help='path to save checkpoints')
 parser.add_argument('--save-prefix', type=str,required=True,
                     help='prefix of saved checkpoint.')
 parser.add_argument('--use-pretrained', action='store_true',
@@ -337,7 +339,7 @@ if __name__ == "__main__":
             'optimizer_beta': optimizer_beta.state_dict(),
             'beta': beta
             }
-        torch.save(state, 'checkpoints/%s_checkpoint_%d.pth.tar'%(args.save_prefix,epoch+1))
+        torch.save(state, os.path.join(args.ckpt, '%s_checkpoint_%d.pth.tar'%(args.save_prefix,epoch+1)))
 
 
 
