@@ -319,8 +319,8 @@ class AverageMeter(object):
 
 
 if __name__ == "__main__":
-    if not os.path.exists('checkpoints/'):
-        os.mkdir('checkpoints/')
+    if not os.path.exists(args.ckpt):
+        os.mkdir(args.ckpt)
     for epoch in range(args.start_epoch, args.epochs):
         adjust_learning_rate(optimizer, epoch, args)
         adjust_learning_rate(optimizer_beta, epoch, args)
