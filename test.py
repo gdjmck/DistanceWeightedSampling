@@ -22,7 +22,7 @@ transform = transforms.Compose([
 if __name__ == '__main__':
     model.eval()
     args = train.args
-    labels = os.listdir(train.traindir)
+    labels = os.listdir(args.eval_path)
     data = [fn for label in labels for fn in glob.glob(os.path.join(args.eval_path, label, '*.jpg'))]
     print('num of data:', len(data))
     np.random.shuffle(data)
